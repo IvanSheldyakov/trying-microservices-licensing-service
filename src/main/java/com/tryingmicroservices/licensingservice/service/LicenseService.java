@@ -21,11 +21,11 @@ public class LicenseService {
 
     public String createLicense(License license, String organizationId, Locale locale) {
 
-        return String.format(messageSource.getMessage("license.create.message", null, locale), license.licenseId());
+        return String.format(messageSource.getMessage("license.create.message", null, locale), license.getLicenseId());
     }
 
     public String updateLicense(License license, String organizationId, Locale locale) {
-        return String.format(messageSource.getMessage("license.update.message", null, locale), license.licenseId());
+        return String.format(messageSource.getMessage("license.update.message", null, locale), license.getLicenseId());
     }
 
     public String deleteLicense(String licenseId, String organizationId, Locale locale) {
