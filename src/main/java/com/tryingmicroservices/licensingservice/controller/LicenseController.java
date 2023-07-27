@@ -11,7 +11,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("v1/organization/{organizationId}/license")
+@RequestMapping("v1/license")
 public class LicenseController {
 
     private final LicenseService licenseService;
@@ -20,53 +20,49 @@ public class LicenseController {
         this.licenseService = licenseService;
     }
 
-    @GetMapping("/{licenseId}")
+    @GetMapping("/{licenseId}/organization/{organizationId}")
     public ResponseEntity<License> getLicense(
             @PathVariable("organizationId") String organizationId,
-            @PathVariable("licenseId") String licenseId) {
+            @PathVariable("licenseId") String licenseId,
+            @RequestHeader(value = "Accept-Language", required = false) Locale locale) {
 
-        License license = licenseService.getLicense(licenseId, organizationId);
+        License license = licenseService.getLicense(licenseId, organizationId, locale);
 
         license.add(linkTo(methodOn(LicenseController.class)
-                        .getLicense(organizationId, license.getLicenseId()))
+                        .getLicense(organizationId, license.getLicenseId(), null))
                         .withSelfRel(),
                 linkTo(methodOn(LicenseController.class)
-                        .createLicense(organizationId, license, null))
+                        .createLicense(license))
                         .withRel("createLicense"),
                 linkTo(methodOn(LicenseController.class)
-                        .updateLicense(organizationId, license, null))
+                        .updateLicense(license))
                         .withRel("updateLicense"),
                 linkTo(methodOn(LicenseController.class)
-                        .deleteLicense(organizationId, license.getLicenseId(), null))
+                        .deleteLicense(license.getLicenseId(), null))
                         .withRel("deleteLicense"));
+
         return ResponseEntity.ok(license);
     }
 
     @PutMapping
-    public ResponseEntity<String> updateLicense(
-            @PathVariable("organizationId") String organizationId,
-            @RequestBody License license,
-            @RequestHeader(value = "Accept-Language", required = false) Locale locale
+    public ResponseEntity<License> updateLicense(
+            @RequestBody License license
     ) {
-        return ResponseEntity.ok(licenseService.updateLicense(license, organizationId, locale));
+        return ResponseEntity.ok(licenseService.updateLicense(license));
     }
 
     @PostMapping
-    public ResponseEntity<String> createLicense(
-            @PathVariable("organizationId") String organizationId,
-            @RequestBody License license,
-            @RequestHeader(value = "Accept-Language", required = false) Locale locale
+    public ResponseEntity<License> createLicense(
+            @RequestBody License license
     ) {
-        return ResponseEntity.ok(licenseService.createLicense(license, organizationId, locale));
+        return ResponseEntity.ok(licenseService.createLicense(license));
     }
 
     @DeleteMapping("/{licenseId}")
     public ResponseEntity<String> deleteLicense(
-            @PathVariable("organizationId") String organizationId,
             @PathVariable("licenseId") String licenseId,
             @RequestHeader(value = "Accept-Language", required = false) Locale locale
     ) {
-        return ResponseEntity.ok(licenseService.deleteLicense(licenseId,
-                organizationId, locale));
+        return ResponseEntity.ok(licenseService.deleteLicense(licenseId, locale));
     }
 }

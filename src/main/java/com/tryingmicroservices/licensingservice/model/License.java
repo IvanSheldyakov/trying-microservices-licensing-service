@@ -3,36 +3,20 @@ package com.tryingmicroservices.licensingservice.model;
 import org.springframework.hateoas.RepresentationModel;
 
 public class License extends RepresentationModel<License> {
-    private int id;
     private String licenseId;
     private String description;
     private String organizationId;
     private String productName;
     private String licenseType;
+    private String comment;
 
-    public License(
-
-            int id,
-            String licenseId,
-            String description,
-            String organizationId,
-            String productName,
-            String licenseType
-    ) {
-        this.id = id;
+    public License(String licenseId, String description, String organizationId, String productName, String licenseType, String comment) {
         this.licenseId = licenseId;
         this.description = description;
         this.organizationId = organizationId;
         this.productName = productName;
         this.licenseType = licenseType;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        this.comment = comment;
     }
 
     public String getLicenseId() {
@@ -75,15 +59,23 @@ public class License extends RepresentationModel<License> {
         this.licenseType = licenseType;
     }
 
-    @Override
-    public String toString() {
-        return "License[" +
-                "id=" + id + ", " +
-                "licenseId=" + licenseId + ", " +
-                "description=" + description + ", " +
-                "organizationId=" + organizationId + ", " +
-                "productName=" + productName + ", " +
-                "licenseType=" + licenseType + ']';
+    public String getComment() {
+        return comment;
     }
 
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    @Override
+    public String toString() {
+        return "License{" +
+                "licenseId='" + licenseId + '\'' +
+                ", description='" + description + '\'' +
+                ", organizationId='" + organizationId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", licenseType='" + licenseType + '\'' +
+                ", comment='" + comment + '\'' +
+                '}';
+    }
 }
